@@ -14,48 +14,93 @@ class PostController extends Controller
 
     public function create()
     {
-        $date = [
-            ['title' => 'title of post from phpstorm',
-                'content' => 'some interesting content',
-                'image' => 'imageblablabla.jpg',
-                'likes' => 20,
-                'is_published' => 1,
-            ],
-            [
-                'title' => 'title of post from phpstorm2',
-                'content' => 'some interesting content2',
-                'image' => 'imageblablabla2.jpg',
-                'likes' => 220,
-                'is_published' => 1,
-            ]];
-        foreach ($date as $item) {
-            Post::create($item);
-        }
-        dd('created');
+        return view('post.create');
+
+
+
+
+//        $date = [
+//            ['title' => 'title of post from phpstorm',
+//                'content' => 'some interesting content',
+//                'image' => 'imageblablabla.jpg',
+//                'likes' => 20,
+//                'is_published' => 1,
+//            ],
+//            [
+//                'title' => 'title of post from phpstorm2',
+//                'content' => 'some interesting content2',
+//                'image' => 'imageblablabla2.jpg',
+//                'likes' => 220,
+//                'is_published' => 1,
+//            ]];
+//        foreach ($date as $item) {
+//            Post::create($item);
+//        }
+//        dd('created');
 
     }
+
+
 
     public function index()
     {
         $posts = Post::where('is_published', 1)->get();
 
-        return view('posts',compact('posts'));
+        return view('post.index',compact('posts'));
     }
 
-    public function update(){
-        $post= Post::find(6);
+    public function store(){
+        $data = request()->validate(
+            ['title'=>'string',
+             'content'=>'string',
+              'image'=>'string'
+            ]
+        );
 
-        $post->update([
-            'title' => 'updated',
-            'content' => 'updated',
-            'image' => 'updated',
-            'likes' => 0,
-            'is_published' => 0
+        Post::create($data);
+        return redirect()->route('post.index');
+    }
+    //Varianta1
+//    public function show($id){
+//        //$post = Post::find($id);
+//        $post = Post::findOrFail($id);
+//        dd($post->title);
+//
+//    }
 
-        ]);
-        dd("updated");
+//varianta 2
+    public function show(Post $post){
+
+       return view('post.show', compact('post'));
+
     }
 
+    public function edit(Post $post){
+
+
+        return view('post.edit', compact('post'));
+
+    }
+
+
+
+
+
+    public function update(Post $post){
+        $data = request()->validate(
+            ['title'=>'string',
+                'content'=>'string',
+                'image'=>'string'
+            ]
+        );
+        $post->update($data);
+        return redirect()->route('post.show',$post->id);
+
+    }
+    public function destroy(Post $post){
+       $post->delete();
+       return redirect()->route('post.index');
+    }
     public function delete(){
         $post = Post::find(2);
         $post->delete();
