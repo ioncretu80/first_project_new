@@ -15,7 +15,14 @@ class CreateArticolsTable extends Migration
     {
         Schema::create('articols', function (Blueprint $table) {
             $table->id();
+            $table->string('art_nummer');
+            $table->string('plc_nummer');
+            $table->string('art_description');
+            $table->double('art_price');
+
             $table->timestamps();
+
+            $table->softDeletes();
         });
     }
 

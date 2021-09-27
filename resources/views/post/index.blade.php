@@ -19,6 +19,7 @@
                 <th scope="col">#</th>
                 <th scope="col">Title</th>
                 <th scope="col">Content</th>
+                <th scope="col">Image</th>
                 <th scope="col">Likes</th>
             </tr>
             </thead>
@@ -27,6 +28,7 @@
                 <tr>
                     <th scope="row">{{$i++}}</th>
                     <td><a href="{{route('post.show',$post->id)}}">{{$post->title}}</a></td>
+                    <td>{{$post->image}}</td>
                     <td>{{$post->content}}</td>
                     <td>{{$post->likes}}</td>
                 </tr>

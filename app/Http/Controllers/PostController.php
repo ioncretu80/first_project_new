@@ -50,12 +50,16 @@ class PostController extends Controller
     }
 
     public function store(){
+
+
         $data = request()->validate(
             ['title'=>'string',
              'content'=>'string',
               'image'=>'string'
             ]
         );
+
+        request()->validate(['file' => 'required|mimes:jpg,jpeg,png|max:2048']);
 
         Post::create($data);
         return redirect()->route('post.index');
