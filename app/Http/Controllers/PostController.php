@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Category;
 use App\Models\Post;
 use Illuminate\Http\Request;
 use const http\Client\Curl\POSTREDIR_ALL;
@@ -44,9 +45,13 @@ class PostController extends Controller
 
     public function index()
     {
-        $posts = Post::where('is_published', 1)->get();
+        $category = Category::find(1);
+//        $posts = Post::where('category_id', $category->id)->get();
 
-        return view('post.index',compact('posts'));
+
+        $post = Post::find(1);
+        dd($post->category);
+        //return view('post.index',compact('posts'));
     }
 
     public function store(){
