@@ -13,14 +13,17 @@ class PostController extends Controller
     //
     protected $table = 'posts';
 
+    public function index()
+    {
+
+        $posts = Post::all();
+        return view('post.index',compact('posts'));
+    }
 
     public function create()
     {
-        return view('post.create');
-
-
-
-
+        $categories = Category::all();
+        return view('post.create', compact('categories'));
 //        $date = [
 //            ['title' => 'title of post from phpstorm',
 //                'content' => 'some interesting content',
@@ -39,29 +42,16 @@ class PostController extends Controller
 //            Post::create($item);
 //        }
 //        dd('created');
-
     }
 
 
-
-    public function index()
-    {
-        $category = Category::find(1);
-//        $posts = Post::where('category_id', $category->id)->get();
-
-
-        $post = Post::find(1);
-        $tag = Tag::find(1);
-        dd($tag->posts);
-
-        //return view('post.index',compact('posts'));
-    }
 
     public function store(){
         $data = request()->validate(
             ['title'=>'string',
              'content'=>'string',
-              'image'=>'string'
+              'image'=>'string',
+               'category_id'=>''
             ]
         );
 
@@ -85,8 +75,9 @@ class PostController extends Controller
 
     public function edit(Post $post){
 
+        $categories = Category::all();
 
-        return view('post.edit', compact('post'));
+        return view('post.edit', compact('post','categories'));
 
     }
 
@@ -97,8 +88,9 @@ class PostController extends Controller
     public function update(Post $post){
         $data = request()->validate(
             ['title'=>'string',
-                'content'=>'string',
-                'image'=>'string'
+             'content'=>'string',
+             'image'=>'string',
+              'category_id'=>''
             ]
         );
         $post->update($data);
