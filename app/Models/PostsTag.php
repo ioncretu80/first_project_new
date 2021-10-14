@@ -9,5 +9,6 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class PostsTag extends Model
 {
     use HasFactory;
+    protected $guarded=false;
 
 }

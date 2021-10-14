@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Category;
 use App\Models\Post;
+use App\Models\PostsTag;
 use App\Models\Tag;
 use Illuminate\Http\Request;
 use const http\Client\Curl\POSTREDIR_ALL;
@@ -17,13 +18,16 @@ class PostController extends Controller
     {
 
         $posts = Post::all();
+        $tags = Tag::all();
         return view('post.index',compact('posts'));
     }
 
     public function create()
     {
         $categories = Category::all();
-        return view('post.create', compact('categories'));
+        $tags = Tag::all();
+
+        return view('post.create', compact('categories','tags'));
 //        $date = [
 //            ['title' => 'title of post from phpstorm',
 //                'content' => 'some interesting content',
@@ -51,11 +55,33 @@ class PostController extends Controller
             ['title'=>'string',
              'content'=>'string',
               'image'=>'string',
-               'category_id'=>''
+               'category_id'=>'',
+                'tags'=>''
             ]
         );
 
-        Post::create($data);
+        $tags = $data['tags'];
+        unset($data['tags']);
+
+        $post = Post::create($data);
+
+        $post->tags()->attach($tags);
+        //Metoda 2
+
+
+
+
+//Metoda1
+//        foreach ($tags as $tag){
+//            PostsTag::firstOrCreate([
+//                'tag_id'=>$tag,
+//                'post_id'=> $post->id
+//            ]);
+//        }
+
+
+
+
         return redirect()->route('post.index');
     }
     //Varianta1
